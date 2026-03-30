@@ -42,7 +42,15 @@ export default function AuthPage() {
         }
       }
     } catch (err: any) {
-      setError(err.message || "Authentication failed");
+      // Extract clean error message from Convex error format
+      let errorMessage = err.message || "Authentication failed";
+      const match = errorMessage.match(/Uncaught Error: (.+?)(?:\s+at|$)/);
+      if (match && match[1]) {
+        errorMessage = match[1];
+      } else if (errorMessage.includes("Uncaught Error:")) {
+        errorMessage = errorMessage.split("Uncaught Error: ")[1]?.split(" at ")[0] || errorMessage;
+      }
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

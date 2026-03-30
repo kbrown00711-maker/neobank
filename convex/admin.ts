@@ -285,9 +285,16 @@ export const approveTransfer = mutation({
         .first();
 
       if (!toAccount) {
-        // If the recipient doesn't exist, complete as approved but leave toAccountId unset.
+        // If the recipient doesn't exist, fail the transfer and refund sender if possible.
+        const fromAccount = await ctx.db.get(transaction.fromAccountId!);
+        if (fromAccount) {
+          await ctx.db.patch(fromAccount._id, {
+            balance: fromAccount.balance + transaction.amount,
+          });
+        }
+
         await ctx.db.patch(args.transactionId, {
-          status: "completed",
+          status: "failed",
           approvedBy: args.adminId,
           approvedAt: Date.now(),
         });
@@ -297,10 +304,13 @@ export const approveTransfer = mutation({
           args.adminId,
           "APPROVE_TRANSFER",
           undefined,
-          `Transaction ${args.transactionId}: Recipient account not found, marked completed`
+          `Transaction ${args.transactionId}: Recipient account not found, transfer failed and refunded`
         );
 
-        return { success: true, message: "Recipient account not found; transfer marked completed." };
+        return {
+          success: false,
+          message: "Recipient account not found. Transfer failed and any sender funds have been refunded.",
+        };
       }
 
       // Complete the transfer
