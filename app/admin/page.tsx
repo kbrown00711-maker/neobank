@@ -245,11 +245,18 @@ export default function AdminPage() {
   const handleApproveTransfer = async (transactionId: string) => {
     setProcessingTransferId(transactionId);
     try {
-      await approveTransfer({
+      const result = await approveTransfer({
         adminId: user.userId as Id<"users">,
         transactionId: transactionId as Id<"transactions">,
         approve: true,
       });
+
+      if (result?.success === false) {
+        alert("Failed to approve transfer: " + (result as any).message || "Unknown error");
+      } else if (result?.message) {
+        alert(result.message);
+      }
+
       setRefreshKey((prev) => prev + 1);
     } catch (error) {
       console.error("Approve failed:", error);
@@ -265,11 +272,18 @@ export default function AdminPage() {
     }
     setProcessingTransferId(transactionId);
     try {
-      await approveTransfer({
+      const result = await approveTransfer({
         adminId: user.userId as Id<"users">,
         transactionId: transactionId as Id<"transactions">,
         approve: false,
       });
+
+      if (result?.success === false) {
+        alert("Failed to reject transfer: " + (result as any).message || "Unknown error");
+      } else if (result?.message) {
+        alert(result.message);
+      }
+
       setRefreshKey((prev) => prev + 1);
     } catch (error) {
       console.error("Reject failed:", error);
