@@ -196,9 +196,8 @@ export default function AdminPage() {
 
   const allUsers = useQuery(
     api.admin.getAllUsers,
-    user ? { adminId: user.userId as Id<"users"> } : "skip",
-    { subscribe: true }
-  );
+    user ? { adminId: user.userId as Id<"users"> } : "skip",)
+
 
   const analytics = useQuery(
     api.admin.getAnalytics,
