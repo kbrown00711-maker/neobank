@@ -92,7 +92,8 @@ function EditUserModal({ user, onClose, onUpdate, adminId }: EditModalProps) {
             />
           </div>
 
-          <div>            <label className="block text-sm font-medium mb-2">Account Number</label>
+          <div>
+            <label className="block text-sm font-medium mb-2">Account Number</label>
             <input
               type="text"
               value={accountNumber}
@@ -101,7 +102,8 @@ function EditUserModal({ user, onClose, onUpdate, adminId }: EditModalProps) {
             />
           </div>
 
-          <div>            <label className="block text-sm font-medium mb-2">Email</label>
+          <div>
+            <label className="block text-sm font-medium mb-2">Email</label>
             <input
               type="email"
               value={email}
@@ -196,8 +198,8 @@ export default function AdminPage() {
 
   const allUsers = useQuery(
     api.admin.getAllUsers,
-    user ? { adminId: user.userId as Id<"users"> } : "skip",)
-
+    user ? { adminId: user.userId as Id<"users"> } : "skip"
+  );
 
   const analytics = useQuery(
     api.admin.getAnalytics,
@@ -211,8 +213,7 @@ export default function AdminPage() {
 
   const pendingTransfers = useQuery(
     api.admin.getPendingTransfers,
-    user ? { adminId: user.userId as Id<"users"> } : "skip",
-    { subscribe: true }
+    user ? { adminId: user.userId as Id<"users"> } : "skip"
   );
 
   const approveTransfer = useMutation(api.admin.approveTransfer);
