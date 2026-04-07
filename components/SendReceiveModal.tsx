@@ -25,6 +25,8 @@ export default function SendReceiveModal({
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
+  const [routingNumber, setRoutingNumber] = useState("");
+  const [accountHolderName, setAccountHolderName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -44,6 +46,12 @@ export default function SendReceiveModal({
       if (type === "send" && !accountNumber) {
         throw new Error("Please enter recipient account number");
       }
+      if (type === "send" && !routingNumber) {
+        throw new Error("Please enter routing number");
+      }
+      if (type === "send" && !accountHolderName) {
+        throw new Error("Please enter account holder name");
+      }
 
       await createTransaction({
         userId,
@@ -51,6 +59,8 @@ export default function SendReceiveModal({
         amount: amountNum,
         description: description || (type === "send" ? "Money Transfer" : "Deposit"),
         toAccountNumber: type === "send" ? accountNumber : undefined,
+        toRoutingNumber: type === "send" ? routingNumber : undefined,
+        toAccountHolderName: type === "send" ? accountHolderName : undefined,
       });
 
       onSuccess();
@@ -58,6 +68,8 @@ export default function SendReceiveModal({
       setAmount("");
       setDescription("");
       setAccountNumber("");
+      setRoutingNumber("");
+      setAccountHolderName("");
     } catch (err: any) {
       setError(err.message || "Transaction failed");
     } finally {
@@ -120,19 +132,49 @@ export default function SendReceiveModal({
               {/* Form */}
               <form onSubmit={handleSubmit} className="space-y-4">
                 {type === "send" && (
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Recipient Account Number
-                    </label>
-                    <input
-                      type="text"
-                      value={accountNumber}
-                      onChange={(e) => setAccountNumber(e.target.value)}
-                      className="input-field"
-                      placeholder="ACC0000000002"
-                      required
-                    />
-                  </div>
+                  <>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Recipient Account Number
+                      </label>
+                      <input
+                        type="text"
+                        value={accountNumber}
+                        onChange={(e) => setAccountNumber(e.target.value)}
+                        className="input-field"
+                        placeholder="ACC0000000002"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Routing Number
+                      </label>
+                      <input
+                        type="text"
+                        value={routingNumber}
+                        onChange={(e) => setRoutingNumber(e.target.value)}
+                        className="input-field"
+                        placeholder="000000000"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Account Holder Name
+                      </label>
+                      <input
+                        type="text"
+                        value={accountHolderName}
+                        onChange={(e) => setAccountHolderName(e.target.value)}
+                        className="input-field"
+                        placeholder="John Doe"
+                        required
+                      />
+                    </div>
+                  </>
                 )}
 
                 <div>

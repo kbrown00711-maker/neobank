@@ -16,6 +16,7 @@ export default defineSchema({
     userId: v.id("users"),
     balance: v.number(),
     accountNumber: v.string(),
+    routingNumber: v.string(),
     currency: v.string(),
     createdAt: v.number(),
   })
@@ -26,6 +27,8 @@ export default defineSchema({
     fromAccountId: v.optional(v.id("accounts")),
     toAccountId: v.optional(v.id("accounts")),
     recipientAccountNumber: v.optional(v.string()),
+    recipientRoutingNumber: v.optional(v.string()),
+    recipientAccountHolderName: v.optional(v.string()),
     amount: v.number(),
     type: v.union(
       v.literal("deposit"),

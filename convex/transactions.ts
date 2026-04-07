@@ -12,6 +12,8 @@ export const createTransaction = mutation({
     amount: v.number(),
     description: v.string(),
     toAccountNumber: v.optional(v.string()),
+    toRoutingNumber: v.optional(v.string()),
+    toAccountHolderName: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     if (args.amount <= 0) {
@@ -51,12 +53,20 @@ export const createTransaction = mutation({
       if (!args.toAccountNumber) {
         throw new Error("Recipient account required");
       }
+      if (!args.toRoutingNumber) {
+        throw new Error("Routing number required");
+      }
+      if (!args.toAccountHolderName) {
+        throw new Error("Account holder name required");
+      }
       if (userAccount.balance < args.amount) {
         throw new Error("Insufficient balance");
       }
 
       transactionData.fromAccountId = userAccount._id;
       transactionData.recipientAccountNumber = args.toAccountNumber;
+      transactionData.recipientRoutingNumber = args.toRoutingNumber;
+      transactionData.recipientAccountHolderName = args.toAccountHolderName;
       transactionData.status = "pending";
 
       // Reserve the amount from user's account (deduct immediately but mark as pending)

@@ -22,6 +22,7 @@ export const getUserProfile = query({
         ? {
             id: account._id,
             accountNumber: account.accountNumber,
+            routingNumber: account.routingNumber,
             balance: account.balance,
             currency: account.currency,
           }

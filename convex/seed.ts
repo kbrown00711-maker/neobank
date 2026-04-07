@@ -26,6 +26,7 @@ export const seedDatabase = mutation({
       userId: adminId,
       balance: 50000.0,
       accountNumber: "ACC0000000001",
+      routingNumber: "011000015",
       currency: "USD",
       createdAt: Date.now(),
     });
@@ -54,6 +55,7 @@ export const seedDatabase = mutation({
         userId,
         balance: user.balance,
         accountNumber: `ACC000000000${i + 2}`,
+        routingNumber: `02100${String(i + 1).padStart(4, "0")}`,
         currency: "USD",
         createdAt: Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000,
       });
