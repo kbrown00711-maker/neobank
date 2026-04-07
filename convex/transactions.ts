@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
+// Mutation to create a new transaction with transfer details
 export const createTransaction = mutation({
   args: {
     userId: v.id("users"),
