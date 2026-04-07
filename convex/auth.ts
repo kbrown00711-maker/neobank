@@ -33,12 +33,14 @@ export const signUp = mutation({
       createdAt: Date.now(),
     });
 
-    // Create account with random account number
+    // Create account with random account number and routing number
     const accountNumber = `ACC${Math.random().toString().slice(2, 12)}`;
+    const routingNumber = `0${Math.random().toString().slice(2, 10)}`;
     await ctx.db.insert("accounts", {
       userId,
       balance: 1000.0, // Starting balance
       accountNumber,
+      routingNumber,
       currency: "USD",
       createdAt: Date.now(),
     });
